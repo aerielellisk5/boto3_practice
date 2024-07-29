@@ -38,6 +38,7 @@ def attach_policy_to_user(userName, policy):
 def create_policy(policyName, policyDocument): 
     with open('./created_policy.json', 'r') as file:
       policyDocument = json.load(file)
+      print(file)
       
     policy_document_json = json.dumps(policyDocument)
     
@@ -49,14 +50,48 @@ def create_policy(policyName, policyDocument):
 # path_to_json = './created_policy.json'    
 # create_policy('list_and_get_s3', path_to_json)    
 
+
+
+# Attach created policy to user
+
+def attach_created_user_policy(userName, policyName, policyDocument):
+  with open('./created_policy.json', 'r') as file:
+      policyDocument = json.load(file)
+      print(file)
+      policy_document_json = json.dumps(policyDocument)
+  
+  response = client.put_user_policy(
+    UserName = userName,
+    PolicyName = policyName, 
+    PolicyDocument = policy_document_json
+  )
+    
+  print(userName)
+  print(policyName)
+  print(policyDocument)
+  print('User policy was added')
+
+path_to_json = './created_policy.json'   
+# attach_created_user_policy('Aeriel', 'list_and_get_s3', path_to_json)  
+
 # List the policies attached to the user
 def list_user_attached_policies(userName):
   response = client.list_attached_user_policies(
     UserName = userName
   )
-  print(userName)
+  # print(userName)
+  # print('big item')
+  # print(response['AttachedPolicies'])
+  # print('Only Attached Policies')
+  for item in response['AttachedPolicies']:
+    print(item['PolicyName'])
+    
+  
+  response2 = client.list_policiies
+  
+        
 
-print(list_user_attached_policies('aws_aeriel'))
+list_user_attached_policies('Aeriel')
 #check by using an api call
 # aws iam list-attached-user-policies \
 #     --user-name Aeriel
